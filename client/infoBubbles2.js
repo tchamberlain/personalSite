@@ -25,7 +25,6 @@ var nodes = [1,2,3,4].map(function () {
     };
 });
 
-
 var force = d3.layout.force()
     .nodes(nodes)
     .size([width, height])
@@ -57,41 +56,16 @@ node.append("text")
 
 circle = svg.selectAll("circle")
 
-// var circle = svg.selectAll("circle")
-//     .data(nodes)
-//     .enter().append("circle")
-//     .attr("r", function (d) {
-//     return d.radius;
-// })
-//     .style("fill", function (d) {
-//     return d.color;
-// })
-//      .call(force.drag)
-
 function tick(e) {
-
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-
-
-    node.each(gravity(.2 * e.alpha))
-        .each(collide(.5))
-        .attr("cx", function (d) {
-        return d.x;
-    })
-        .attr("cy", function (d) {
-        return d.y;
-    });
-
-
-    // node.each(gravity(.2 * e.alpha))
-    //     .each(collide(.5))
-    //     .attr("dx", function (d) {
-    //     return d.x;
-    // })
-    //     .attr("dy", function (d) {
-    //     return d.y;
-    // });
+  node.each(gravity(.2 * e.alpha))
+      .each(collide(.5))
+      .attr("cx", function (d) {
+      return d.x;
+  })
+      .attr("cy", function (d) {
+      return d.y;
+  });
 }
 
 // Move nodes toward cluster focus.
