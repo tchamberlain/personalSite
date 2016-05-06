@@ -7,22 +7,6 @@ var margin = {
 width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-//TESTING !!!
-// var node = svg.selectAll(".node")
-//     .data(nodes)
-//   .enter().append("g")
-//     .attr("class", "node")
-//     .call(force.drag);
-
-// node.append("circle")
-//     .attr("r", 4.5);
-
-// node.append("text")
-//     .attr("dx", 12)
-//     .attr("dy", ".35em")
-//     .text(function(d) { return d.name });
-//TESTING
-
 var n = 3,
     m = 1,
     padding = 6,
@@ -41,6 +25,7 @@ var nodes = [1,2,3,4].map(function () {
     };
 });
 
+
 var force = d3.layout.force()
     .nodes(nodes)
     .size([width, height])
@@ -55,26 +40,41 @@ var svg = d3.select(".line").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var circle = svg.selectAll("circle")
+var node = svg.selectAll(".node")
     .data(nodes)
-    .enter().append("circle")
-    .attr("r", function (d) {
-    return d.radius;
-})
-    .style("fill", function (d) {
-    return d.color;
-})
-     .call(force.drag)
+    .enter().append("g")
+    .attr("class", 'node')
+    // .call(force.drag)  
 
-    // circle
-    // .append("text")
-    // .attr("dx", 12)
-    // .attr("dy", ".35em")
-    // .style("fill", "white")
-    // .text(function(d) { return 'd.name'; })
+node.append("circle")
+    .attr("r", 45)
+
+node.append("text")
+    .attr("dy", ".35em")
+    .attr("dx", -25)
+    .style("fill", "white")
+    .text(function(d) { return "TEST"; });
+
+circle = svg.selectAll("circle")
+
+// var circle = svg.selectAll("circle")
+//     .data(nodes)
+//     .enter().append("circle")
+//     .attr("r", function (d) {
+//     return d.radius;
+// })
+//     .style("fill", function (d) {
+//     return d.color;
+// })
+//      .call(force.drag)
 
 function tick(e) {
-    circle.each(gravity(.2 * e.alpha))
+
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+
+    node.each(gravity(.2 * e.alpha))
         .each(collide(.5))
         .attr("cx", function (d) {
         return d.x;
@@ -82,6 +82,16 @@ function tick(e) {
         .attr("cy", function (d) {
         return d.y;
     });
+
+
+    // node.each(gravity(.2 * e.alpha))
+    //     .each(collide(.5))
+    //     .attr("dx", function (d) {
+    //     return d.x;
+    // })
+    //     .attr("dy", function (d) {
+    //     return d.y;
+    // });
 }
 
 // Move nodes toward cluster focus.
