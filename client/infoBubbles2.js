@@ -14,7 +14,7 @@ var n = 3,
     color = d3.scale.category10().domain(d3.range(m)),
     x = d3.scale.ordinal().domain(d3.range(m)).rangePoints([0, width], 1);
 
-var nodes = [1,2,3,4].map(function () {
+var nodes = ['ABOUT','PROJECTS','CONTACT'].map(function (d) {
     var i = Math.floor(Math.random() * m), //color
         v = (i + 1) / m * -Math.log(Math.random()); //value
     return {
@@ -22,6 +22,7 @@ var nodes = [1,2,3,4].map(function () {
         color: 'blue',
         cx: x(i),
         cy: height / 2,
+        text: d
     };
 });
 
@@ -43,16 +44,16 @@ var node = svg.selectAll(".node")
     .data(nodes)
     .enter().append("g")
     .attr("class", 'node')
-    // .call(force.drag)  
+    .call(force.drag)  
 
 node.append("circle")
     .attr("r", 45)
 
 node.append("text")
     .attr("dy", ".35em")
-    .attr("dx", -25)
+    .attr("dx", -22)
     .style("fill", "white")
-    .text(function(d) { return "TEST"; });
+    .text(function(d) { return 'TEST'; });
 
 circle = svg.selectAll("circle")
 
@@ -103,3 +104,17 @@ function collide(alpha) {
         });
     };
 }
+
+
+
+
+
+// trying to add on click handler
+ svg.selectAll("circle").on("click", function(){
+            d3.select(this).attr('r', 200)
+                .style("fill","lightcoral")
+                .style("stroke","red");
+            console.log('you clicked!!!');
+        });
+
+
