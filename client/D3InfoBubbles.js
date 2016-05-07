@@ -14,11 +14,17 @@ var n = 3,
     color = d3.scale.category10().domain(d3.range(m)),
     x = d3.scale.ordinal().domain(d3.range(m)).rangePoints([0, width], 1);
 
-var nodes = ['ABOUT','PROJECTS','CONTACT'].map(function (d) {
+
+var info = [{ title:'ABOUT', leftAlign:-22 },{ title:'PROJECTS', leftAlign:-28 },{ title:'CONTACT', leftAlign:-22 }]
+
+var nodes = info.map(function (d) {
     var i = Math.floor(Math.random() * m), //color
         v = (i + 1) / m * -Math.log(Math.random()); //value
+        console.log('we getting title here??', d.title);
     return {
-        radius: radius(30),
+        title: d.title,
+        leftAlign: d.leftAlign,
+        radius: radius(20),
         color: 'blue',
         cx: x(i),
         cy: height / 2,
@@ -47,13 +53,13 @@ var node = svg.selectAll(".node")
     .call(force.drag)  
 
 node.append("circle")
-    .attr("r", 45)
+    .attr("r", 53)
 
 node.append("text")
     .attr("dy", ".35em")
-    .attr("dx", -22)
+    .attr("dx", function(d) { return d.leftAlign; })
     .style("fill", "white")
-    .text(function(d) { return 'TEST'; });
+    .text(function(d) { return d.title; });
 
 circle = svg.selectAll("circle")
 
@@ -104,10 +110,6 @@ function collide(alpha) {
         });
     };
 }
-
-
-
-
 
 // trying to add on click handler
  svg.selectAll("circle").on("click", function(){
