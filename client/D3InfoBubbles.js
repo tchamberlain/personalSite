@@ -20,7 +20,6 @@ var margin = {
 width = x*.8,
 height = y*.9;
 
-
 var n = 3,
     m = 1,
     padding = 6,
@@ -206,23 +205,28 @@ var handleClick = function(node) {
     .attr("transform", "translate(-1500,3000)")
 
 
-  // add the x
-  node.append("svg:image")
+  // add the x for closing the info block
+  node
+  .append("svg:image")
+   .on("click", function(d) { handleClose(d); })
+  .attr("class", "close")
   .attr('x',rectWidth*.8)
   .attr('y',-rectHeight*.12)
   .attr('width', 15)
   .attr('height', 15)
   .attr('opacity', .7)
-
-   .attr("xlink:href","./assets/x.png")
+  .attr("xlink:href","./assets/x.png")
 }
 
-
+var handleClose = function(closeImg){
+  console.log('CLICKED!!');
+}
 
 // click handler
  svg.selectAll(".node").on("click", function(){
     handleClick(d3.select(this));
 });
+
 
 // make sure we reset these when the screen size changes
   function resize() {
