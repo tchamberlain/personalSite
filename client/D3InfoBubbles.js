@@ -8,6 +8,7 @@ var w = window,
 
 // Initially, no node is selected
 var selectedNode = null;
+var draggable = true;
 
 // Getting dimensions for svg
 var margin = {
@@ -73,15 +74,15 @@ var node = svg.selectAll(".node")
 
 // adding a rectangle, but cutting the radius so it starts as a circle
 node
-    .append("rect")
-    .attr("rx",80)
-    .attr("ry",80)
-    .attr("x",-56)
-    .attr("y",-77)
-    .attr("width",160)
-    .attr("height",160)
-    .attr("stroke","black")
-    .attr("fill","black");
+  .append("rect")
+  .attr("rx",80)
+  .attr("ry",80)
+  .attr("x",-56)
+  .attr("y",-77)
+  .attr("width",160)
+  .attr("height",160)
+  .attr("stroke","black")
+  .attr("fill","black");
 
 
 node.append("text")
@@ -97,7 +98,7 @@ circle = svg.selectAll("circle")
 
 function tick(e) {
   // we only want movement every tick if no node is selected
-  if(selectedNode === null){
+  //if(selectedNode === null){
 
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   node.each(gravity(.2* e.alpha))
@@ -109,7 +110,8 @@ function tick(e) {
       return d.y;
   });
 
-  } 
+  //node.attr("transform", function(d) { return "translate(" + 1+ "," +1 + ")"; });
+
 }
 
 // Move nodes toward cluster focus.
@@ -149,13 +151,16 @@ function collide(alpha) {
 }
 
 var handleClick = function(node) {
+
   selectedNode = node;
   currRect = node.selectAll('rect');
 
   //want a black label for white background
   node.selectAll('text')
-    .style("fill", "black")
-
+    .style("fill", 
+      function(d){
+        return "black";
+      });
   rectWidth = svg.attr("width") *.7;
   rectHeight = svg.attr("height") *.8;
 
@@ -179,6 +184,9 @@ var handleClick = function(node) {
 
 
   node.attr("class", "selected");
+  svg.selectAll(".selected").on('mousedown.drag', draggable ? null : dragCallback);
+  this.value = 'switch drag to ' + draggable;
+  draggable = !draggable;
 
   var xTranslate = (svg.attr("width") * .25) +   +'';
   var yTranslate = (svg.attr("height") * .25)  +'';
@@ -202,13 +210,14 @@ var handleClick = function(node) {
 
   //grab other nodes, move them
   svg.selectAll(".node").transition().duration(500)
-    .attr("transform", "translate(-1500,3000)")
+    .attr("transform", "translate(3000,3000)")
 
+  force.stop();
 
   // add the x for closing the info block
   node
   .append("svg:image")
-   .on("click", function(d) { handleClose(d); })
+  .on("click", function(d) { handleClose(d); })
   .attr("class", "close")
   .attr('x',rectWidth*.8)
   .attr('y',-rectHeight*.12)
@@ -216,14 +225,89 @@ var handleClick = function(node) {
   .attr('height', 15)
   .attr('opacity', .7)
   .attr("xlink:href","./assets/x.png")
+
+
 }
 
 var handleClose = function(closeImg){
-  console.log('CLICKED!!');
+
+  svg.selectAll(".selected").on('click',null);
+  selectedNode = null;
+
+  svg.selectAll(".selected").on('mousedown.drag', draggable ? null : dragCallback);
+  this.value = 'switch drag to ' + draggable;
+  draggable = !draggable;
+ 
+  svg.selectAll(".selected")
+  .transition().duration(50)
+  .selectAll("rect")
+      .attr("rx",100)
+    .attr("ry",100)
+    .attr("fill",
+      function(d){
+        d.radius = 150;
+        d.fixed = false;
+        return "white";
+      })
+
+  force.resume();
+
+  svg.selectAll(".selected")
+  .transition().duration(100)
+  .selectAll("rect")
+    .attr("rx",80)
+    .attr("ry",80)
+    .attr("x",-56)
+    .attr("y",-77)
+    .attr("width",160)
+    .attr("height",160)
+    .attr("stroke","black")
+    .attr("fill",
+      function(d){
+        console.log(d.radius)
+        console.log(svg.selectAll(".selected").selectAll("rect").attr("rx"))
+        d.radius = 90;
+        return "white";
+      })
+
+  svg.selectAll(".selected")
+    .selectAll("image").remove()
+  svg.selectAll(".selected")
+    .selectAll("foreignObject").remove();
+  
+
+
+
+  svg.selectAll(".selected").transition().duration(500)
+    .delay(function(d, i){
+        return 100
+    })
+    .attr('class','node')
+    .attr("x",100)
+    .attr("y",177)
+
+
+ setTimeout(function(){
+  // click handler
+     d3.selectAll(".node").on("click", function(){
+        handleClick(d3.select(this));
+    }); 
+  }, 300);
+
+ svg.selectAll(".node").on('mousedown.drag', draggable ? null : dragCallback);
+ this.value = 'switch drag to ' + draggable;
+ draggable = !draggable;
+
+
+
 }
+
+var dragCallback =  svg.selectAll(".node").property('__onmousedown.drag')['_'];
 
 // click handler
  svg.selectAll(".node").on("click", function(){
+
+
     handleClick(d3.select(this));
 });
 
