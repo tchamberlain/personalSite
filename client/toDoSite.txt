@@ -1,0 +1,5 @@
+- refactor code
+- fix draggable thing after selecting a node
+-make all nodes 'fixed' when something is selected, so that nothing moves
+- on resize, make info box bigger and more centered
+- add text to everythign

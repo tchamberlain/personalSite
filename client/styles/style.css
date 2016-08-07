@@ -45,6 +45,11 @@ body {
   font-family: 'Cantarell', sans-serif;
 }
 
+
+.contactHtml {
+  font-size: 118%;
+}
+
 .container {
   padding-left: 10vw;
   height: 90vh;

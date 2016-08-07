@@ -28,7 +28,11 @@ var n = 3,
     color = d3.scale.category10().domain(d3.range(m)),
     x = d3.scale.ordinal().domain(d3.range(m)).rangePoints([0, width], 1);
 
-var info = [{ title:'ABOUT', leftAlign:-6, detailText: "Software engineer with a strong background in JavaScript, AngularJS, Backbone.js, Node.js, Express, MongoDB, and Socket.IO. I enjoy using software to solve complex problems, designing data structures and algorithms, and engineering user-oriented products. My technical interests include robotics, machine learning, graphics, renewable energy, cybersecurity, and communication." },{ title:'PROJECTS', leftAlign: -22},{ title:'CONTACT', leftAlign:-21 }]
+var contactHtml = "<div class = 'contactHtml'><div>github:&ensp; <a href='https://github.com/tchamberlain'> https://github.com/tchamberlain</a></div><br><br><div>linkedin:&ensp;<a href='https://www.linkedin.com/in/tachamberlain'> https://www.linkedin.com/in/tachamberlain</a></div><br><br><div>email:&ensp;<a href='mailto:taylorannchamberlain@gmail.com'> taylorannchamberlain@gmail.com</a></div><div>";
+var projectsHtml = "I am a full-stack developer who specializes in JavaScript. I have experience building applications with a variety of stacks, including Angular.js and React.js on the frontend, and MySQL and MongoDB on the backend."
+var aboutHtml = "<div class='aboutHtml'><img src='./assets/me.png' border-radius='25px'style='width:134px;height:144px;'><p>I am a full-stack developer who specializes in JavaScript. I have experience building applications with a variety of stacks, including Angular.js and React.js on the frontend, and MySQL and MongoDB on the backend.</p></div>"
+
+var info = [{ title:'ABOUT', leftAlign:-6, detailText: aboutHtml },{ title:'PROJECTS', leftAlign: -22},{ title:'CONTACT', leftAlign:-21, detailText: contactHtml }]
 
 var nodes = info.map(function (d) {
     var i = Math.floor(Math.random() * m), //color
@@ -160,7 +164,8 @@ var handleClick = function(node) {
     .style("fill", 
       function(d){
         return "black";
-      });
+      })
+
   rectWidth = svg.attr("width") *.7;
   rectHeight = svg.attr("height") *.8;
 
